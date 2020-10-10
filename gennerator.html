@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <script>
+        function *foo () {
+            // yield new Promise((resolved, rejected) => {
+            //     setTimeout(() => {
+            //         resolved(1)
+            //     }, 5000)
+            // })
+            yield setTimeout(() => {
+                console.log(11)
+            }, 5000)
+            yield setTimeout(() => {
+                console.log(22)
+            }, 5000)
+            yield setTimeout(() => {
+                console.log(33)
+            }, 5000)
+        }
+
+        function getData () {
+            const aa = foo()
+            while (true) {
+                let temp = aa.next()
+                if (temp.done) {
+                    break
+                }
+            }
+        }
+
+        getData()
+
+        // const aa = foo()
+        // console.log(aa.next())
+        // aa.next().value.then(res => {
+        //     console.log('res', res)
+        //     if (res) {
+        //         console.log(aa.next())
+        //     }
+        // })
+    </script>
+</body>
+</html>

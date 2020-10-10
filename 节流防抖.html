@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <div>
+        <span>防抖</span>
+        <div id="show-count">0</div>
+        <button onclick="myAddCount()">加</button>
+        <button onclick="myDecCount()">减</button>
+    </div>
+    <div>
+        <span>节流</span>
+        <input type="text" oninput="inputValue(event)">
+        <div id="show-input"></div>
+    </div>
+    <script>
+        let count = 0
+        let value = ''
+        const showDom = document.getElementById('show-count')
+        const showInputDom = document.getElementById('show-input')
+        const addBtn = document.getElementById('add')
+
+        function refreshCount () {
+            showDom.innerHTML = count
+        }
+
+        function addCount () {
+            let time = 0
+            const timer = setInterval(() => {
+                time += 1000
+                count++
+                refreshCount()
+                if (time > 2000) {
+                    clearInterval(timer)
+                }
+            }, 1000)
+        }
+
+        function decCount () {
+            let time = 0
+            const timer = setInterval(() => {
+                time += 1000
+                count--
+                refreshCount()
+                if (time > 2000) {
+                    clearInterval(timer)
+                }
+            }, 1000)
+        }
+
+        /*
+            1、防抖，在一个时间段内触发多次，但是只执行一次最后一次触发的事件方法，每一次触发都会清除上一次的定时器。
+                实现思路：利用闭包实实现。每次事件被触发，都会返回一个闭包，闭包内部包含一个定时器，在规定的时间段内，每一次触发都会清除之前定时器，创建一个新的定时器。
+
+            2、节流，高频事件触发，在规定的时间n秒内只触发一次。
+                实现思路：利用闭包保存一个标志flag，每次高频事件触发时，判断该标志的状态（完成状态及未完成状态），再确定是否执行事件。
+        */
+
+        // 防抖实现
+        function debounce (time, fn) {
+            let timer = null
+            // 使用闭包，让timer变量一直保存在内存之中
+            return function () {
+                clearTimeout(timer)
+                timer = setTimeout(() => {
+                    fn.apply(window)
+                }, time)
+            }
+        }
+        const myAddCount = debounce(2000, addCount)
+        const myDecCount = debounce(2000, decCount)
+
+        function inputValue (e) {
+            value = e.target.value
+            refreshInputValue()
+        }
+
+        // 节流实现
+        function throttle (time, fn) {
+            // 使用闭包，保存一个标志变量flag
+            let flag = true
+            return function () {
+                if (!flag) {
+                    return false
+                }
+                flag  = false
+                let timer = setTimeout(() => {
+                    fn.apply(window)
+                    clearTimeout(timer)
+                    flag = true
+                }, time)
+            }
+        }
+        const refreshInputValue = throttle(1000, () => {
+            showInputDom.innerHTML = value
+        })
+    </script>
+</body>
+</html>
