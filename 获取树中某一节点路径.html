@@ -1,0 +1,107 @@
+<script>
+    const node_list = [
+        {
+            id: 1,
+            pid: 0,
+            value: 'a'
+        },
+        {
+            id: 2,
+            pid: 0,
+            value: 'b'
+        },
+        {
+            id: 3,
+            pid: 1,
+            value: 'c'
+        },
+        {
+            id: 4,
+            pid: 2,
+            value: 'd'
+        },
+        {
+            id: 5,
+            pid: 3,
+            value: 'e'
+        },
+        {
+            id: 6,
+            pid: 5,
+            value: 'f'
+        },
+        {
+            id: 7,
+            pid: 2,
+            value: 'g'
+        },
+        {
+            id: 8,
+            pid: 7,
+            value: 'h'
+        }
+    ]
+
+    const listTotree = (list) => {
+        list.map(it => {
+            list.map(item => {
+                if (!it.children) {
+                    it.children = []
+                }
+                if (it.id === item.pid) {
+                    it.children.push(item)
+                }
+            })
+            listTotree(it.children)
+        })
+        list = list.filter(it => it.pid == 0) // 过滤节点
+        return list
+    }
+    const tree = listTotree(node_list)
+    console.log('tree', tree)
+    
+    const loopFindNode = (data, value, callback) => {
+        data.map((it, rootIndex) => {
+            if (it.value === value) {
+                return callback(it, rootIndex)
+            } else {
+                loopFindNode(it.children, value, callback)
+            }
+        })
+    }
+
+    function getPathByKey(data, value) {
+        let temppath = [];
+        try {
+            function getNodePath(node){
+                temppath.push(node.value);
+                if (node.value === value) {
+                    throw ("GOT IT!");
+                }
+                if (node.children && node.children.length > 0) {
+                    for (var i = 0; i < node.children.length; i++) {
+                        getNodePath(node.children[i]);
+                    }
+                    temppath.pop();
+                } else {
+                    temppath.pop();
+                }
+            }
+            for (let i = 0; i < data.length; i++) {
+                getNodePath(data[i]);
+            }
+        } catch (e) {
+            console.log('temppath', temppath)
+            return temppath;
+        }
+    }
+
+    let selectedNode = 'f'
+    loopFindNode(tree, selectedNode, (item, rootIndex) => {
+        console.log('rootIndex', rootIndex)
+        console.log('item', item)
+        let path = getPathByKey([tree[rootIndex]], selectedNode).join('/')
+        console.log('path', path)
+    })
+
+</script>

@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://unpkg.com/bootstrap-table@1.15.3/dist/bootstrap-table.min.css">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <title>bootstrapTable</title>
+</head>
+<body>
+    <table id="table"></table>
+    <script src="https://s3.pstatp.com/cdn/expire-1-M/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://unpkg.com/bootstrap-table@1.15.3/dist/bootstrap-table.min.js"></script>
+    <script>
+        $('#table').bootstrapTable({
+            columns: [{
+                field: 'id',
+                title: 'Item ID'
+            }, {
+                field: 'name',
+                title: 'Item Name'
+            }, {
+                field: 'price',
+                title: 'Item Price'
+            },{
+                field: 'column1',
+                title: '列1'
+            }],
+            smartDisplay: false,
+            pagination: true,
+            showPaginationSwitch: true,
+            pageSize: 10,
+            pageList: [10, 20, 30],
+            showFooter: true,
+            data: (() => {
+                let temp = []
+                for (let i =0; i < 100; i++) {
+                    temp.push({
+                        id: i + 'id',
+                        name: 'cm',
+                        price: '100',
+                        column1: 'column1_1'
+                    })
+                }
+                return temp
+            })(),
+            formatSRPaginationPageText:function(page){
+                return '跳转至'+page;
+            },
+            formatShowingRows: (pageFrom, pageTo, totalRows) => {
+                return ``
+            },
+            formatRecordsPerPage: (pageNumber) => {
+                return `${pageNumber}`
+            }
+
+        });
+    </script>
+</body>
+</html>

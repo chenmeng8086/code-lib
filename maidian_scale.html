@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        .app {
+            width: 100%;
+            height: 10%;
+        }
+
+        .size_btn {
+            margin: 5px;
+        }
+
+        .show_box {
+            position: relative;
+            margin: 0 auto;
+            min-height: 400px;
+            background-color: red;
+            border: 1px red solid;
+            background-repeat: no-repeat;
+            background-size: 100% 100%;
+            background-image: url(https://ss0.bdstatic.com/70cFvHSh_Q1YnxGkpoWK1HF6hhy/it/u=2980445260,41238050&fm=26&gp=0.jpg);
+        }
+
+        .add_rect_btn, .delete_rect_btn {
+            margin: 5px;
+        }
+    </style>
+</head>
+<body>
+    <div class="app">
+        <div class="change_size_box">
+            <button class="size_btn" onclick="changeSize(400)">size0</button>
+            <button class="size_btn" onclick="changeSize(500)">size1</button>
+            <button class="size_btn" onclick="changeSize(600)">size2</button>
+            <button class="size_btn" onclick="changeSize(700)">size3</button>
+        </div>
+        <div>
+            <button class="add_rect_btn" onclick="addRect()">add rect</button>
+            <button class="delete_rect_btn" onclick="removeAllChildNodes()">remove all</button>
+        </div>
+        <div class="show_box" onmousemove="set_div_position(event)"></div>
+    </div>
+
+    <script>
+        let show_box_width = 400
+        const show_box = document.getElementsByClassName('show_box')[0]
+        show_box.style.width = show_box_width + 'px'
+
+        let currentd_div = null
+        let rate = 1
+        let flag = false
+        let basic_reacts = []
+
+        function addRect () {
+            basic_reacts.push({
+                id: new Date().getTime(),
+                width: 50,
+                height: 50,
+                top: 0,
+                left: 0
+            })
+            updateShowBox(basic_reacts)
+        }
+
+        function transform (rects) {
+            return rects.map(it => {
+                return {
+                    ...it,
+                    width: (rate * it.width).toFixed(2),
+                    height: (rate * it.height).toFixed(2),
+                    top: (rate * it.top).toFixed(2),
+                    left: (rate * it.left).toFixed(2),
+                }
+            })
+        }
+        
+        function updateShowBox () {
+            show_box.innerHTML = ''
+            let rects = transform(basic_reacts)
+            rects.forEach(rect => {
+                let div = document.createElement('div')
+                div.style.position = 'absolute'
+                div.style.backgroundColor = 'blue'
+                div.id = rect.id
+                div.innerText = `${rect.top}|${rect.left}`
+                div.style.width = rect.width + 'px'
+                div.style.height = rect.height + 'px'
+                div.style.top = rect.top + 'px'
+                div.style.left = rect.left + 'px'
+
+                div.draggable = true
+                div.onmousedown = function (e) {
+                    currentd_div = this
+                    flag = true
+                }
+                div.onmouseup = function () {
+                    flag = false
+                }
+                show_box.appendChild(div)
+            })
+        }
+
+        function removeAllChildNodes () {
+            show_box.innerHTML = ''
+            this.basic_reacts = []
+        }
+
+        function set_div_position (e) {
+            if (!currentd_div || !flag) return false
+            basic_reacts.find(it => {
+                if (it.id == currentd_div.id) {
+                    it.left = (e.offsetX / rate).toFixed(2)
+                    it.top = (e.offsetY / rate).toFixed(2)
+                }
+            })
+            updateShowBox(basic_reacts)
+        }
+
+        function changeSize (width) {
+            rate = (width / show_box_width).toFixed(2)
+
+            show_box.style.width = width + 'px'
+            const img = new Image()
+            let src = 'https://ss0.bdstatic.com/70cFvHSh_Q1YnxGkpoWK1HF6hhy/it/u=2980445260,41238050&fm=26&gp=0.jpg'
+            img.src = src
+            img.onload = () => {
+                show_box_height = (rate * img.height).toFixed(2)
+                show_box.style.height = show_box_height + 'px'
+            }
+
+            updateShowBox(basic_reacts)
+        }
+    </script>
+</body>
+</html>
