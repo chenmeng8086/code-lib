@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+    <script>
+        /*
+            数组扁平化
+            1、利用递归函数实现
+            2、利用正则实现
+            3、利用arr.flat()实现，flat高版本的浏览器才支持
+        */ 
+
+        // 利用递归函数实现
+        let a = [1, 2, [11, 22, 33, ['aa', 'bb']], {name: 'cm', hobby: 'basketball'}]
+        const flat = (arr, res = []) => {
+            arr.forEach(it => {
+                if (Array.isArray(it)) {
+                    flat(it, res)
+                } else {
+                    res.push(it)
+                }
+            })
+
+            return res
+        }
+        // console.log('a', a)
+        // console.log(flat(a))
+
+        // 利用正则实现
+        const flatByReg = arr => {
+            let reg = /\[|\]/g
+            let res = `[${JSON.stringify(arr).replace(reg, '')}]`
+            return JSON.parse(res)
+        }
+        // console.log(flatByReg(a))
+    </script>
+</html>
