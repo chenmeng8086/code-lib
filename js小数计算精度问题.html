@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <script>
+        function calc (num1, num2, operation) {
+            const num1Digits = (num1.toString().split('.')[1] || '').length;
+            const num2Digits = (num2.toString().split('.')[1] || '').length;
+            const baseNum = Math.pow(10, Math.max(num1Digits, num2Digits));
+
+            switch (operation) {
+                case '+':
+                    return (num1 * baseNum + num2 * baseNum) / baseNum;
+                    break;
+                case '-':
+                    return (num1 * baseNum - num2 * baseNum) / baseNum;
+                    break;
+                case '*':
+                    return (num1 * baseNum * num2 * baseNum) / (baseNum * baseNum);
+                    break;
+                case '/':
+                    return (num1 * baseNum) / (num2 * baseNum);
+                    break;
+            }
+            
+        }
+
+        console.log('+', calc(0.1, 0.2, '+'))
+        console.log(0.1 + 0.2)
+
+        console.log('-', calc(0.67, 0.32, '-'))
+        console.log(0.67 - 0.32)
+
+        console.log('*', calc(0.1, 0.2, '*'))
+        console.log(0.1 * 0.2)
+
+        console.log('/', calc(56.7, 100, '/'))
+        console.log(56.7 / 100)
+
+        console.log('+', calc(100, 0, '+'))
+        console.log(100 + 0)
+
+        console.log('-', calc(2, 0.32, '-'))
+        console.log(2 - 0.32)
+
+        console.log('*', calc(0.1, 2, '*'))
+        console.log(0.1 * 2)
+
+        console.log('/', calc(56.7, 0.1, '/'))
+        console.log(56.7 / 0.1)
+
+        // 判断一个字符串是不是数字，使用isNaN，需要考虑字符串为空串、null的情况，因isNaN会把这两者视为数字
+        function isNumberStr (str) {
+            if (str === null || str === '') {
+                return false
+            }
+
+            if (isNaN(str)) {
+                return false
+            }
+
+            return true
+        }
+
+        console.log('123', isNumberStr('123'))
+        console.log('.123', isNumberStr('.123'))
+        console.log('123.', isNumberStr('123.'))
+        console.log('..123', isNumberStr('..123'))
+        console.log('123..', isNumberStr('123..'))
+        console.log('1..23', isNumberStr('1..23'))
+        console.log('123s', isNumberStr('123s'))
+        console.log('空字符串', isNumberStr(''))
+        console.log('null', isNumberStr(null))
+        console.log('undefined', isNumberStr(undefined))
+        console.log('0', isNumberStr(0))
+    </script>
+</body>
+</html>
