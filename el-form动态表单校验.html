@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://unpkg.com/element-ui/lib/theme-chalk/index.css">
+    <title>Document</title>
+</head>
+<body>
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+    <script src="https://unpkg.com/element-ui/lib/index.js"></script>
+    <div id="app">
+        <el-form ref="form" :model="form">
+            <el-form-item
+                :prop="'formData.' + index + '.value'"
+                :label="item.name"
+                v-for="(item ,index) in form.formData"
+                :rules="[
+                    { required: true, message: '请输入邮箱地址', trigger: 'blur' },
+                ]"
+            >
+                <el-input v-model="item.value"></el-input>
+            </el-form-item>
+        </el-form>
+        <el-button @click="addItem">添加</el-button>
+        <el-button @click="submit('form')">提交</el-button>
+    </div>
+    <script>
+        new Vue({
+            el: '#app',
+            data () {
+                return {
+                    form: {
+                        formData: [{
+                            name: 'a',
+                            value: ''
+                        }, {
+                            name: 'b',
+                            value: ''
+                        }],
+                    }
+                }
+            },
+
+            methods: {
+                addItem () {
+                    this.form.formData.push({
+                        name: 'c',
+                        value: ''
+                    })
+                },
+
+                submit (formName) {
+                    this.$refs[formName].validate((valid) => {
+                        console.log('valid: ', valid);
+                        if (valid) {
+                            alert('submit!');
+                        } else {
+                            console.log('error submit!!');
+                            return false;
+                        }
+                    });
+                }
+            }
+        })
+    </script>
+</body>
+</html>
